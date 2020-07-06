@@ -16,7 +16,9 @@ function Divide(input1, input2) {
 };
 
 function operate(operattorValue, input1, input2) {
-    console.log(operattorValue, input1, input2)
+        if (input1 == 0 || input2 == 0) {
+            alert('Haha very funny you can\'t divide by zero')
+        }
         if (operattorValue == '*') {
             return Multiply(input1, input2);
         }
@@ -49,21 +51,24 @@ let button = document.querySelectorAll('button');
 for (let i = 0; i < button.length; i++) {
     button[i].addEventListener('click', function(e) {
         let value = screen.value;   
-        console.log(value)
-        console.log(e.target.value) 
+
         if (e.target.value >= 0 && e.target.value <= 9) {
-            if (value >= 0 && firstValue >= 1) {
-                screen.value = e.target.value;
-                secondValue = undefined;
-            }
+            console.log(value)
+            console.log(e.target.value) 
             if (value == 0 && firstValue >= 1) {
                 screen.value = e.target.value;
             }
             else if (value >= 1) {
-                screen.value = `${value}${e.target.value}`;
-            }
-            else if (value >= 0 && e.target.value == '.') {
-                screen.value = `${value}${e.target.value}`;
+                if (firstValue === undefined) {
+                    screen.value = `${value}${e.target.value}`;
+                }
+                else if (firstValue >= 1 && currentOperator === undefined) {
+                    firstValue = undefined;
+                    screen.value = e.target.value;
+                }
+                else if (firstValue >= 1){
+                    screen.value = `${value}${e.target.value}`;
+                }
             }
             else {
                 screen.value = e.target.value;
@@ -81,6 +86,10 @@ for (let i = 0; i < button.length; i++) {
                     DoMath(e.target.value);
                 }
         }
+        else if (e.target.value == '.') {
+            screen.value = `${value}${e.target.value}`;
+            button[i].disabled = true;
+        }
         if (e.target.value == '=' && firstValue >= 1) {
             secondValue = screen.value;
             firstValue = operate(currentOperator, firstValue, secondValue);
@@ -93,6 +102,21 @@ for (let i = 0; i < button.length; i++) {
             secondValue = undefined;
             currentOperator = undefined;
             screen.value = 0;
+        }
+        if (e.target.value == 'clear') {
+            if (screen.value == 0) {
+                alert('You can\'t backspace a zero');
+            }
+            else {
+                value = screen.value;
+                if (value >= 1 && value <= 9) {
+                    screen.value = 0;
+                }
+                else {
+                    value = value.slice(0,-1);
+                    screen.value = value;
+                }
+            }
         }
     })
 };
